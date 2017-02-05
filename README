@@ -4,3 +4,7 @@ turns your Realtek RTL2832 based DVB dongle into a SDR receiver
 
 For more information see:
 http://sdr.osmocom.org/trac/wiki/rtl-sdr
+
+This branch includes additional build options, and bias-t support for
+RTL-SDR.com V3 dongles. See INSTALL file for details.
+
