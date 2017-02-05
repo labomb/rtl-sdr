@@ -11,7 +11,7 @@ To build using cmake
 
 $ mkdir build
 $ cd build
-$ cmake ../ -DHAVE_BIAST=ON -DINSTALL_UDEV_RULES=ON -DINSTAL_DVBT_BLACKLIST=ON
+$ cmake ../ -DHAVE_BIAST=ON -DINSTALL_UDEV_RULES=ON -DINSTALL_DVBT_BLACKLIST=ON
 $ make
 $ sudo make install
 $ sudo ldconfig
