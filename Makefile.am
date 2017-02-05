@@ -19,10 +19,10 @@ install-udev-rules:
 uninstall-udev-rules:
 	rm -rf /etc/udev/rules.d/rtl-sdr.rules
 
-install-dvb-blacklist:
+install-dvbt-blacklist:
 	$(INSTALL_DATA) rtlsdr.conf /etc/modprobe.d
 
-uninstall-dvb-blacklist:
+uninstall-dvbt-blacklist:
 	rm -rf /etc/modprobe.d/rtlsdr.conf
 
 EXTRA_DIST = git-version-gen
