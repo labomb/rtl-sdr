@@ -1164,6 +1164,19 @@ int rtlsdr_set_agc_mode(rtlsdr_dev_t *dev, int on)
 	return rtlsdr_demod_write_reg(dev, 0, 0x19, on ? 0x25 : 0x05, 1);
 }
 
+#ifdef HAVE_BIAST
+int rtlsdr_set_bias_tee(rtlsdr_dev_t *dev, int on)
+{
+	if (!dev)
+		return -1;
+
+	rtlsdr_set_gpio_output(dev, 0);
+	rtlsdr_set_gpio_bit(dev, 0, on);
+
+	return 1;
+
+}
+#endif
 int rtlsdr_set_direct_sampling(rtlsdr_dev_t *dev, int on)
 {
 	int r = 0;
@@ -1698,6 +1711,21 @@ int rtlsdr_close(rtlsdr_dev_t *dev)
 	return 0;
 }
 
+#ifdef HAVE_BIAST
+int rtlsdr_close_bt(rtlsdr_dev_t *dev)
+{
+	if (!dev)
+		return -1;
+
+	// First turn off the bias tee supply
+	rtlsdr_set_gpio_bit(dev, 0, 0);
+	// then close the device
+	rtlsdr_close(dev);
+
+	return 0;
+}
+
+#endif
 int rtlsdr_reset_buffer(rtlsdr_dev_t *dev)
 {
 	if (!dev)

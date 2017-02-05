@@ -71,7 +71,12 @@ add_executable(rtl_fm rtl_fm.c)
 add_executable(rtl_eeprom rtl_eeprom.c)
 add_executable(rtl_adsb rtl_adsb.c)
 add_executable(rtl_power rtl_power.c)
+if(HAVE_BIAST)
+add_executable(rtl_biast rtl_biast.c)
+set(INSTALL_TARGETS rtlsdr_shared rtlsdr_static rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power rtl_biast)
+else()
 set(INSTALL_TARGETS rtlsdr_shared rtlsdr_static rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power)
+endif()
 
 target_link_libraries(rtl_sdr convenience_static rtlsdr_shared
     ${LIBUSB_LIBRARIES}
@@ -101,6 +106,12 @@ target_link_libraries(rtl_power convenience_static rtlsdr_shared
     ${LIBUSB_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
 )
+if(HAVE_BIAST)
+target_link_libraries(rtl_biast convenience_static rtlsdr_shared
+    ${LIBUSB_LIBRARIES}
+    ${CMAKE_THREAD_LIBS_INIT}
+)
+endif()
 if(UNIX)
 target_link_libraries(rtl_adsb m)
 target_link_libraries(rtl_power m)
@@ -124,6 +135,9 @@ target_link_libraries(rtl_fm libgetopt_static)
 target_link_libraries(rtl_eeprom libgetopt_static)
 target_link_libraries(rtl_adsb libgetopt_static)
 target_link_libraries(rtl_power libgetopt_static)
+if(HAVE_BIAST)
+target_link_libraries(rtl_biast libgetopt_static)
+endif()
 endif()
 ########################################################################
 # Install built library files & utilities

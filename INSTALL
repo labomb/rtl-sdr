@@ -1,0 +1,62 @@
+
+To build using cmake
+===============================================================================
+
+$ mkdir build
+$ cd build
+$ cmake ../ -DHAVE_BIAST=ON -DINSTALL_UDEV_RULES=ON -DINSTAL_DVBT_BLACKLIST=ON
+$ make
+$ sudo make install
+$ sudo ldconfig
+
+The defines are optional and have the following meaning:
+
+  HAVE_BIAST
+
+  This will enable bias tee support for RTL-SDR.com V3 dongles. It will also
+  build the additional tool rtl_biast, which provides a means to turn the
+  dongle's bias-t supply on or off.
+
+  INSTALL_UDEV_RULES
+
+  This option will install udev rules that will enable recognition of various
+  RTL-SDR dongles when plugged in to a USB port.
+
+  INSTALL_DVBT_BLACKLIST
+
+  This will install a file that will prevent your system from loading default
+  DVB-T drivers that would interfere with the librtlsdr driver.
+
+  DETACH_KERNEL_DRIVER
+
+  This option will enable the ability to detach the kernel driver.
+  
+
+To build using autoreconf and configure 
+===============================================================================
+
+$ autoreconf -ivf
+$ ./configure --enable-bias-t --enable-driver-detach
+$ make
+$ sudo make install
+$ sudo ldconfig
+
+and optionally:
+
+$ make install-udev-rules
+$ make install-dvbt-blacklist
+$ sudo ldconfig
+
+The configure switches are optional, and have the following meaning:
+
+  enable-bias-t
+
+  This will enable bias tee support for RTL-SDR.com V3 dongles. It will also
+  build the additional tool rtl_biast, which provides a means to turn the
+  dongle's bias-t supply on or off.
+
+  enable-driver-detach
+
+  This option will enable the ability to detach the kernel driver.
+
+

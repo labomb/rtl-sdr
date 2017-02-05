@@ -74,6 +74,17 @@ AC_ARG_ENABLE(driver-detach,
     CFLAGS="$CFLAGS -DDETACH_KERNEL_DRIVER"
 fi])
 
+BIAST=false
+
+AC_ARG_ENABLE(bias-t,
+[  --enable-bias-t                 Enable bias-t support (disabled by default)],
+[if test x$enableval = xyes; then
+    CFLAGS="$CFLAGS -DHAVE_BIAST"
+    BIAST=true
+fi])
+
+AM_CONDITIONAL(HAVE_BIAST, test $BIAST = true)
+
 dnl Generate the output
 AC_CONFIG_HEADER(config.h)
 

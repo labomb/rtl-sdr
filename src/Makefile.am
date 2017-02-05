@@ -12,7 +12,11 @@ lib_LTLIBRARIES = librtlsdr.la
 librtlsdr_la_SOURCES = librtlsdr.c tuner_e4k.c tuner_fc0012.c tuner_fc0013.c tuner_fc2580.c tuner_r82xx.c
 librtlsdr_la_LDFLAGS = -version-info $(LIBVERSION)
 
+if HAVE_BIAST
+bin_PROGRAMS         = rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power rtl_biast
+else
 bin_PROGRAMS         = rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power
+endif
 
 rtl_sdr_SOURCES      = rtl_sdr.c convenience/convenience.c
 rtl_sdr_LDADD        = librtlsdr.la
@@ -34,3 +38,8 @@ rtl_adsb_LDADD        = librtlsdr.la $(LIBM)
 
 rtl_power_SOURCES     = rtl_power.c convenience/convenience.c
 rtl_power_LDADD       = librtlsdr.la $(LIBM)
+
+if HAVE_BIAST
+rtl_biast_SOURCES     = rtl_biast.c convenience/convenience.c
+rtl_biast_LDADD       = librtlsdr.la
+endif

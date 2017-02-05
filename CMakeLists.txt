@@ -114,6 +114,20 @@ else (INSTALL_UDEV_RULES)
     message (STATUS "Udev rules not being installed, install them with -DINSTALL_UDEV_RULES=ON")
 endif (INSTALL_UDEV_RULES)
 
+########################################################################
+# Install DVB-T driver blacklist file
+########################################################################
+option(INSTALL_DVBT_BLACKLIST "Install DVB-T driver blacklist file" OFF)
+if (INSTALL_DVBT_BLACKLIST)
+    install (
+        FILES rtlsdr.conf
+        DESTINATION "/etc/modprobe.d"
+        COMPONENT "kernel"
+        )
+else (INSTALL_DVBT_BLACKLIST)
+    message (STATUS "DVB-T driver blacklist not being installed, install them with -DINSTALL_DVBT_BLACKLIST=ON")
+endif (INSTALL_DVBT_BLACKLIST)
+
 option(DETACH_KERNEL_DRIVER "Detach kernel driver if loaded" OFF)
 if (DETACH_KERNEL_DRIVER)
     message (STATUS "Building with kernel driver detaching enabled")
@@ -121,6 +135,14 @@ if (DETACH_KERNEL_DRIVER)
 else (DETACH_KERNEL_DRIVER)
     message (STATUS "Building with kernel driver detaching disabled, use -DDETACH_KERNEL_DRIVER=ON to enable")
 endif (DETACH_KERNEL_DRIVER)
+
+option(HAVE_BIAST "Enable bias-t support" OFF)
+if (HAVE_BIAST)
+    message (STATUS "Building with bias-t support enabled")
+    add_definitions(-DHAVE_BIAST=1)
+else (HAVE_BIAST)
+    message (STATUS "Building with biast-t support disabled, use -DHAVE_BIAST=ON to enable")
+endif (HAVE_BIAST)
 
 ########################################################################
 # Add subdirectories
