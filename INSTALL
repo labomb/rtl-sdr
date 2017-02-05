@@ -1,4 +1,11 @@
 
+If you used 'git clone ...' to retrieve this repo, do this first:
+
+$ cd rtl-sdr
+$ git checkout bias-t-support
+
+Then...
+
 To build using cmake
 ===============================================================================
 
