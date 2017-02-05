@@ -110,6 +110,7 @@ if (INSTALL_UDEV_RULES)
         DESTINATION "/etc/udev/rules.d"
         COMPONENT "udev"
         )
+    message (STATUS "Udev rules will be installed")
 else (INSTALL_UDEV_RULES)
     message (STATUS "Udev rules not being installed, install them with -DINSTALL_UDEV_RULES=ON")
 endif (INSTALL_UDEV_RULES)
@@ -124,6 +125,7 @@ if (INSTALL_DVBT_BLACKLIST)
         DESTINATION "/etc/modprobe.d"
         COMPONENT "kernel"
         )
+    message (STATUS "DVB-T driver blacklist will be installed")
 else (INSTALL_DVBT_BLACKLIST)
     message (STATUS "DVB-T driver blacklist not being installed, install them with -DINSTALL_DVBT_BLACKLIST=ON")
 endif (INSTALL_DVBT_BLACKLIST)
