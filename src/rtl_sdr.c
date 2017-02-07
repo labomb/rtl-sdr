@@ -52,6 +52,9 @@ void usage(void)
 		"\t[-d device_index (default: 0)]\n"
 		"\t[-g gain (default: 0 for auto)]\n"
 		"\t[-p ppm_error (default: 0)]\n"
+#ifdef HAVE_BIAST
+		"\t[-B enable bias-t (default: off)]\n"
+#endif
 		"\t[-b output_block_size (default: 16 * 16384)]\n"
 		"\t[-n number of samples to read (default: 0, infinite)]\n"
 		"\t[-S force sync output (default: async)]\n"
@@ -114,6 +117,9 @@ int main(int argc, char **argv)
 	int r, opt;
 	int gain = 0;
 	int ppm_error = 0;
+#ifdef HAVE_BIAST
+	int biast_onoff = 0;
+#endif
 	int sync_mode = 0;
 	int direct_sampling = 0;
 	int dithering = 1;
@@ -125,7 +131,7 @@ int main(int argc, char **argv)
 	uint32_t samp_rate = DEFAULT_SAMPLE_RATE;
 	uint32_t out_block_size = DEFAULT_BUF_LENGTH;
 
-	while ((opt = getopt(argc, argv, "d:f:g:s:b:n:p:D:SN")) != -1) {
+	while ((opt = getopt(argc, argv, "d:f:g:s:b:n:p:B:D:SN")) != -1) {
 		switch (opt) {
 		case 'd':
 			dev_index = verbose_device_search(optarg);
@@ -143,6 +149,11 @@ int main(int argc, char **argv)
 		case 'p':
 			ppm_error = atoi(optarg);
 			break;
+#ifdef HAVE_BIAST
+		case 'B':
+			biast_onoff = atoi(optarg);
+			break;
+#endif
 		case 'b':
 			out_block_size = (uint32_t)atof(optarg);
 			break;
@@ -239,6 +250,13 @@ int main(int argc, char **argv)
 
 	verbose_ppm_set(dev, ppm_error);
 
+#ifdef HAVE_BIAST
+	if (biast_onoff == 1)
+		rtlsdr_set_bias_tee(dev, 1);
+	else
+		rtlsdr_set_bias_tee(dev, 0);
+#endif
+
 	if(strcmp(filename, "-") == 0) { /* Write samples to stdout */
 		file = stdout;
 #ifdef _WIN32
@@ -296,7 +314,11 @@ int main(int argc, char **argv)
 	if (file != stdout)
 		fclose(file);
 
+#ifdef HAVE_BIAST
+	rtlsdr_close_bt(dev);
+#else
 	rtlsdr_close(dev);
+#endif
 	free (buffer);
 out:
 	return r >= 0 ? r : -r;

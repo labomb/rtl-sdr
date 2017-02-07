@@ -93,6 +93,9 @@ void usage(void)
 		"\t[-e allowed_errors (default: 5)]\n"
 		"\t[-g tuner_gain (default: automatic)]\n"
 		"\t[-p ppm_error (default: 0)]\n"
+#ifdef HAVE_BIAST
+		"\t[-B enable bias-t (default: off)]\n"
+#endif
 		"\tfilename (a '-' dumps samples to stdout)\n"
 		"\t (omitting the filename also uses stdout)\n\n"
 		"Streaming with netcat:\n"
@@ -368,11 +371,14 @@ int main(int argc, char **argv)
 	int dev_index = 0;
 	int dev_given = 0;
 	int ppm_error = 0;
+#ifdef HAVE_BIAST
+	int biast_onoff = 0;
+#endif
 	pthread_cond_init(&ready, NULL);
 	pthread_mutex_init(&ready_m, NULL);
 	squares_precompute();
 
-	while ((opt = getopt(argc, argv, "d:g:p:e:Q:VS")) != -1)
+	while ((opt = getopt(argc, argv, "d:g:p:B:e:Q:VS")) != -1)
 	{
 		switch (opt) {
 		case 'd':
@@ -385,6 +391,11 @@ int main(int argc, char **argv)
 		case 'p':
 			ppm_error = atoi(optarg);
 			break;
+#ifdef HAVE_BIAST
+		case 'B':
+			biast_onoff = atoi(optarg);
+			break;
+#endif
 		case 'V':
 			verbose_output = 1;
 			break;
@@ -461,6 +472,13 @@ int main(int argc, char **argv)
 	verbose_ppm_set(dev, ppm_error);
 	r = rtlsdr_set_agc_mode(dev, 1);
 
+#ifdef HAVE_BIAST
+	if (biast_onoff == 1)
+		rtlsdr_set_bias_tee(dev, 1);
+	else
+		rtlsdr_set_bias_tee(dev, 0);
+#endif
+
 	/* Set the tuner frequency */
 	verbose_set_frequency(dev, ADSB_FREQ);
 
@@ -486,7 +504,11 @@ int main(int argc, char **argv)
 	if (file != stdout) {
 		fclose(file);}
 
+#ifdef HAVE_BIAST
+	rtlsdr_close_bt(dev);
+#else
 	rtlsdr_close(dev);
+#endif
 	free(buffer);
 	return r >= 0 ? r : -r;
 }

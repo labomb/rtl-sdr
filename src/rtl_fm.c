@@ -122,6 +122,9 @@ struct dongle_state
 	int16_t  *buf16;
 	uint32_t buf_len;
 	int      ppm_error;
+#ifdef HAVE_BIAST
+	int      biast;
+#endif
 	int      offset_tuning;
 	int      direct_sampling;
 	int      mute;
@@ -249,6 +252,9 @@ void usage(void)
 		//"\t    for fm squelch is inverted\n"
 		//"\t[-o oversampling (default: 1, 4 recommended)]\n"
 		"\t[-p ppm_error (default: 0)]\n"
+#ifdef HAVE_BIAST
+		"\t[-B enable bias-t (default: off)]\n"
+#endif
 		"\t[-E enable_option (default: none)]\n"
 		"\t    use multiple -E to enable multiple options\n"
 		"\t    edge:   enable lower edge tuning\n"
@@ -1491,7 +1497,7 @@ int main(int argc, char **argv)
 	output_init(&output);
 	controller_init(&controller);
 
-	while ((opt = getopt(argc, argv, "d:f:g:s:b:l:o:t:r:p:E:F:A:M:h")) != -1) {
+	while ((opt = getopt(argc, argv, "d:f:g:s:l:o:t:r:p:B:E:F:A:M:h")) != -1) {
 		switch (opt) {
 		case 'd':
 			dongle.dev_index = verbose_device_search(optarg);
@@ -1539,6 +1545,11 @@ int main(int argc, char **argv)
 			dongle.ppm_error = atoi(optarg);
 			custom_ppm = 1;
 			break;
+#ifdef HAVE_BIAST
+		case 'B':
+			dongle.biast = atoi(optarg);
+			break;
+#endif
 		case 'E':
 			if (strcmp("edge",  optarg) == 0) {
 				controller.edge = 1;}
@@ -1674,6 +1685,13 @@ int main(int argc, char **argv)
 	}
 	verbose_ppm_set(dongle.dev, dongle.ppm_error);
 
+#ifdef HAVE_BIAST
+	if (dongle.biast == 1)
+		rtlsdr_set_bias_tee(dongle.dev, 1);
+	else
+		rtlsdr_set_bias_tee(dongle.dev, 0);
+#endif
+
 	if (strcmp(output.filename, "-") == 0) { /* Write samples to stdout */
 		output.file = stdout;
 #ifdef _WIN32
@@ -1736,7 +1754,11 @@ int main(int argc, char **argv)
 	if (output.file != stdout) {
 		fclose(output.file);}
 
+#ifdef HAVE_BIAST
+	rtlsdr_close_bt(dongle.dev);
+#else
 	rtlsdr_close(dongle.dev);
+#endif
 	return r >= 0 ? r : -r;
 }
 

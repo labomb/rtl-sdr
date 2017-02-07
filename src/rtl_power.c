@@ -170,6 +170,9 @@ void usage(void)
 		"\t[-d device_index (default: 0)]\n"
 		"\t[-g tuner_gain (default: automatic)]\n"
 		"\t[-p ppm_error (default: 0)]\n"
+#ifdef HAVE_BIAST
+		"\t[-B enable bias-t (default: off)]\n"
+#endif
 		"\tfilename (a '-' dumps samples to stdout)\n"
 		"\t  omitting the filename also uses stdout\n"
 		"\n"
@@ -1032,6 +1035,9 @@ int main(int argc, char **argv)
 	int dev_given = 0;
 	int ppm_error = 0;
 	int custom_ppm = 0;
+#ifdef HAVE_BIAST
+	int biast_onoff = 0;
+#endif
 	int interval = 10;
 	int fft_threads = 1;
 	int single = 0;
@@ -1048,7 +1054,7 @@ int main(int argc, char **argv)
 	init_misc(&ms);
 	strcpy(dev_label, "DEFAULT");
 
-	while ((opt = getopt(argc, argv, "f:i:s:r:t:d:g:p:e:w:c:F:1EPTLD:Oh")) != -1) {
+	while ((opt = getopt(argc, argv, "f:i:s:r:t:d:g:p:B:e:w:c:F:1EPTLD:Oh")) != -1) {
 		switch (opt) {
 		case 'f': // lower:upper:bin_size
 			if (f_set) {
@@ -1104,6 +1110,11 @@ int main(int argc, char **argv)
 			ppm_error = atoi(optarg);
 			custom_ppm = 1;
 			break;
+#ifdef HAVE_BIAST
+		case 'B':
+			biast_onoff = atoi(optarg);
+			break;
+#endif
 		case 'r':
 			ms.target_rate = (int)atofs(optarg);
 			break;
@@ -1212,6 +1223,13 @@ int main(int argc, char **argv)
 	}
 	verbose_ppm_set(dev, ppm_error);
 
+#ifdef HAVE_BIAST
+	if (biast_onoff == 1)
+		rtlsdr_set_bias_tee(dev, 1);
+	else
+		rtlsdr_set_bias_tee(dev, 0);
+#endif
+
 	if (strcmp(filename, "-") == 0) { /* Write log to stdout */
 		file = stdout;
 #ifdef _WIN32
@@ -1272,7 +1290,11 @@ int main(int argc, char **argv)
 	if (file != stdout) {
 		fclose(file);}
 
+#ifdef HAVE_BIAST
+	rtlsdr_close_bt(dev);
+#else
 	rtlsdr_close(dev);
+#endif
 	//free(fft_buf);
 	//for (i=0; i<tune_count; i++) {
 	//	free(tunes[i].avg);

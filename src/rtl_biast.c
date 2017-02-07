@@ -38,10 +38,10 @@ void usage(void)
 	fprintf(stderr,
 		"rtl_biast, a tool for turning the RTL-SDR.com \n"
 		"bias tee ON and OFF. Example to turn on the \n"
-		"bias tee for device 0:  rtl_biast -d 0 -b 1\n\n"
+		"bias tee for device 0:  rtl_biast -d 0 -B 1\n\n"
 		"Usage:\n"
 		"\t[-d device_index (default: 0)]\n"
-		"\t[-b bias_onoff (0 or 1, default: 0)]\n");
+		"\t[-B bias_onoff (0 or 1, default: 0)]\n");
 	exit(1);
 }
 
@@ -51,12 +51,12 @@ int main(int argc, char **argv)
 	uint32_t dev_index = 0, bias_onoff = 0;
 	rtlsdr_dev_t *dev = NULL;
 
-	while ((opt = getopt(argc, argv, "d:b:h?")) != -1) {
+	while ((opt = getopt(argc, argv, "d:B:h?")) != -1) {
 		switch (opt) {
 		case 'd':
 			dev_index = atoi(optarg);
 			break;
-		case 'b':
+		case 'B':
 			bias_onoff = atoi(optarg);
 			break;
 		default:
@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 	}
 
 	if ((bias_onoff != 0) && (bias_onoff != 1)) {
-		fprintf(stderr, "Invalid -b option.\n");
+		fprintf(stderr, "Invalid -B option.\n");
 		usage();
 	}
 

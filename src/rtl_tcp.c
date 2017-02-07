@@ -96,6 +96,9 @@ void usage(void)
 		"\t[-n max number of linked list buffers to keep (default: 500)]\n"
 		"\t[-d device index (default: 0)]\n"
 		"\t[-P ppm_error (default: 0)]\n");
+#ifdef HAVE_BIAST
+		"\t[-B enable bias-t (default: off)]\n");
+#endif
 	exit(1);
 }
 
@@ -371,6 +374,9 @@ int main(int argc, char **argv)
 	int gain = 0;
 	int ppm_error = 0;
 	int custom_ppm = 0;
+#ifdef HAVE_BIAST
+	int biast_onoff = 0;
+#endif
 	struct llist *curelem,*prev;
 	pthread_attr_t attr;
 	void *status;
@@ -388,7 +394,7 @@ int main(int argc, char **argv)
 	struct sigaction sigact, sigign;
 #endif
 
-	while ((opt = getopt(argc, argv, "a:p:f:g:s:b:n:d:P:")) != -1) {
+	while ((opt = getopt(argc, argv, "a:p:f:g:s:b:n:d:P:B:")) != -1) {
 		switch (opt) {
 		case 'd':
 			dev_index = verbose_device_search(optarg);
@@ -419,6 +425,11 @@ int main(int argc, char **argv)
 			ppm_error = atoi(optarg);
 			custom_ppm = 1;
 			break;
+#ifdef HAVE_BIAST
+		case 'B':
+			biast_onoff = atoi(optarg);
+			break;
+#endif
 		default:
 			usage();
 			break;
@@ -460,6 +471,13 @@ int main(int argc, char **argv)
 		verbose_ppm_eeprom(dev, &ppm_error);
 	}
 	verbose_ppm_set(dev, ppm_error);
+
+#ifdef HAVE_BIAST
+	if (biast_onoff == 1)
+		rtlsdr_set_bias_tee(dev, 1);
+	else
+		rtlsdr_set_bias_tee(dev, 0);
+#endif
 
 	/* Set the sample rate */
 	r = rtlsdr_set_sample_rate(dev, samp_rate);
@@ -593,7 +611,11 @@ int main(int argc, char **argv)
 	}
 
 out:
+#ifdef HAVE_BIAST
+	rtlsdr_close_bt(dev);
+#else
 	rtlsdr_close(dev);
+#endif
 	closesocket(listensocket);
 	closesocket(s);
 #ifdef _WIN32
