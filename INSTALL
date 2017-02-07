@@ -4,10 +4,13 @@ If you used 'git clone ...' to retrieve this repo, do this first:
 $ cd rtl-sdr
 $ git checkout bias-t-support
 
+If downloading a zip archive from GitHub, be sure to change to the bias-t-support
+branch first.
+
 Then...
 
 To build using cmake
-===============================================================================
+=================================================================================
 
 $ mkdir build
 $ cd build
@@ -20,9 +23,10 @@ The defines are optional and have the following meaning:
 
   HAVE_BIAST
 
-  This will enable bias tee support for RTL-SDR.com V3 dongles. It will also
-  build the additional tool rtl_biast, which provides a means to turn the
-  dongle's bias-t supply on or off.
+  This will enable bias tee support for RTL-SDR.com V3 dongles. Each of the
+  tools will have a new '-B' option to enable the bias-t supply. An additional
+  rtl_biast tool will also be built, and provides a means to turn the dongle's
+  bias-t supply on or off.
 
   INSTALL_UDEV_RULES
 
@@ -40,7 +44,7 @@ The defines are optional and have the following meaning:
   
 
 To build using autoreconf and configure 
-===============================================================================
+=================================================================================
 
 $ autoreconf -ivf
 $ ./configure --enable-bias-t --enable-driver-detach
