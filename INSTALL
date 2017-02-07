@@ -50,8 +50,8 @@ $ sudo ldconfig
 
 and optionally:
 
-$ make install-udev-rules
-$ make install-dvbt-blacklist
+$ sudo make install-udev-rules
+$ sudo make install-dvbt-blacklist
 $ sudo ldconfig
 
 The configure switches are optional, and have the following meaning:
