@@ -95,10 +95,10 @@ void usage(void)
 		"\t[-b number of buffers (default: 15, set by library)]\n"
 		"\t[-n max number of linked list buffers to keep (default: 500)]\n"
 		"\t[-d device index (default: 0)]\n"
-		"\t[-P ppm_error (default: 0)]\n");
 #ifdef HAVE_BIAST
-		"\t[-B enable bias-t (default: off)]\n");
+		"\t[-B enable bias-t (default: off)]\n"
 #endif
+		"\t[-P ppm_error (default: 0)]\n");
 	exit(1);
 }
 
