@@ -505,7 +505,10 @@ int main(int argc, char **argv)
 		fclose(file);}
 
 #ifdef HAVE_BIAST
-	rtlsdr_close_bt(dev);
+	if (biast_onoff == 1)
+		rtlsdr_close_bt(dev);
+	else
+		rtlsdr_close(dev);
 #else
 	rtlsdr_close(dev);
 #endif
