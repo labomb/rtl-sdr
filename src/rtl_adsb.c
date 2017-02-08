@@ -94,7 +94,7 @@ void usage(void)
 		"\t[-g tuner_gain (default: automatic)]\n"
 		"\t[-p ppm_error (default: 0)]\n"
 #ifdef HAVE_BIAST
-		"\t[-B enable bias-t (default: off)]\n"
+		"\t[-B enable bias-t supply (default: off)]\n"
 #endif
 		"\tfilename (a '-' dumps samples to stdout)\n"
 		"\t (omitting the filename also uses stdout)\n\n"

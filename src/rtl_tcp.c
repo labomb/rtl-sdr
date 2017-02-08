@@ -96,7 +96,7 @@ void usage(void)
 		"\t[-n max number of linked list buffers to keep (default: 500)]\n"
 		"\t[-d device index (default: 0)]\n"
 #ifdef HAVE_BIAST
-		"\t[-B enable bias-t (default: off)]\n"
+		"\t[-B enable bias-t supply (default: off)]\n"
 #endif
 		"\t[-P ppm_error (default: 0)]\n");
 	exit(1);

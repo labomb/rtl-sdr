@@ -53,7 +53,7 @@ void usage(void)
 		"\t[-g gain (default: 0 for auto)]\n"
 		"\t[-p ppm_error (default: 0)]\n"
 #ifdef HAVE_BIAST
-		"\t[-B enable bias-t (default: off)]\n"
+		"\t[-B enable bias-t supply (default: off)]\n"
 #endif
 		"\t[-b output_block_size (default: 16 * 16384)]\n"
 		"\t[-n number of samples to read (default: 0, infinite)]\n"

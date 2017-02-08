@@ -253,7 +253,7 @@ void usage(void)
 		//"\t[-o oversampling (default: 1, 4 recommended)]\n"
 		"\t[-p ppm_error (default: 0)]\n"
 #ifdef HAVE_BIAST
-		"\t[-B enable bias-t (default: off)]\n"
+		"\t[-B enable bias-t supply (default: off)]\n"
 #endif
 		"\t[-E enable_option (default: none)]\n"
 		"\t    use multiple -E to enable multiple options\n"
