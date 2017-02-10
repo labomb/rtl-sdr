@@ -612,7 +612,7 @@ int main(int argc, char **argv)
 
 out:
 #ifdef HAVE_BIAST
-        if (biast_onoff == 1)
+        if (biast_onoff)
                 rtlsdr_close_bt(dev);
         else
                 rtlsdr_close(dev);

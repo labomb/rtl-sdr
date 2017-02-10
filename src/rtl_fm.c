@@ -1755,7 +1755,7 @@ int main(int argc, char **argv)
 		fclose(output.file);}
 
 #ifdef HAVE_BIAST
-        if (dongle.biast == 1)
+        if (dongle.biast)
                 rtlsdr_close_bt(dongle.dev);
         else
                 rtlsdr_close(dongle.dev);

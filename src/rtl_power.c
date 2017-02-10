@@ -1291,7 +1291,7 @@ int main(int argc, char **argv)
 		fclose(file);}
 
 #ifdef HAVE_BIAST
-        if (biast_onoff == 1)
+        if (biast_onoff)
                 rtlsdr_close_bt(dev);
         else
                 rtlsdr_close(dev);
