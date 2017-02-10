@@ -43,7 +43,7 @@ The defines are optional and have the following meaning:
   This option will enable the ability to detach the kernel driver.
   
 
-To build using autoreconf and configure 
+To build using autoreconf and configure
 =================================================================================
 
 $ autoreconf -ivf
